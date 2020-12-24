@@ -1,0 +1,5 @@
+name: Ezpizee API Client on Drupal
+type: module
+description: For making API calls from Drupal to Ezpizee
+package: Custom
+core: 8.x

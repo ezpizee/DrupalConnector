@@ -1,0 +1,5 @@
+name: Ezpizee Portal on Drupal
+type: module
+description: For managing your Ezpizee e-commerce components on Drupal
+package: Custom
+core: 8.x

@@ -1,0 +1,7 @@
+ezpz_portal.content:
+  path: /ezpizee/portal
+  defaults:
+    _controller: '\Drupal\ezpz_portal\Controller\EzpizeePortalController::portalSPA'
+    _title: 'Ezpizee Portal'
+  requirements:
+    _permission: 'access content'

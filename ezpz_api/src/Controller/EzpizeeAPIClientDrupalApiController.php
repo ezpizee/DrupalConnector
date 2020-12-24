@@ -1,0 +1,59 @@
+<?php
+
+namespace Drupal\ezpz_api\Controller;
+
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\ezpz_api\Controller\ContextProcessors\BaseContextProcessor;
+use Ezpizee\MicroservicesClient\Client;
+use Ezpizee\Utils\RequestEndpointValidator;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+
+class EzpizeeAPIClientDrupalApiController extends ControllerBase
+{
+  /**
+   * @var Client
+   */
+  private $microserviceClient;
+  private $endpoints = [];
+
+  public function __construct(Client $client)
+  {
+    $this->checkAuthenticated();
+    $this->microserviceClient = $client;
+  }
+
+  public function load(string $method, string $uri): array
+  {
+    $uri = str_replace('//', '/', '/'.$uri);
+    RequestEndpointValidator::validate($uri, $this->endpoints);
+    $namespace = RequestEndpointValidator::getContextProcessorNamespace();
+    $class = new $namespace($this->microserviceClient);
+    if ($class instanceof BaseContextProcessor) {
+      if (!in_array($method, $class->methods())) {
+        $class->setContextCode(405);
+        $class->setContextMessage('Method not allowed');
+        return $class->getContext();
+      } else if (!$class->validRequiredParams()) {
+        $class->setContextMessage('INVALID_VALUE_FOR_REQUIRED_FIELD');
+        $class->setContextCode(422);
+        return $class->getContext();
+      } else {
+        $class->exec();
+        return $class->getContext();
+      }
+    }
+    return ['code'=>404, 'message'=>'Invalid namespace: '.$namespace, 'data'=>null];
+  }
+
+  private function checkAuthenticated()
+  {
+    if (!$this->currentUser()->isAuthenticated()) {
+      $baseUrl = \Drupal::request()->getSchemeAndHttpHost();
+      $requestUri = \Drupal::request()->getRequestUri();
+      $response = new RedirectResponse($baseUrl . '/user/login?destination=' . $requestUri, 302);
+      $response->send();
+      return;
+    }
+  }
+}

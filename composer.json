@@ -1,0 +1,27 @@
+{
+  "name": "drupal/ezpz",
+  "description": "Ezpizee Drupal Connector",
+  "type": "drupal-module",
+  "keywords": ["Drupal", "Ezpizee", "E-commerce"],
+  "homepage": "https://github.com/ezpizee/DrupalConnector",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Sothea Nim",
+      "homepage": "https://www.ezpizee.com/en/about/team/sothea-nim.html",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Sokhon Pang",
+      "homepage": "https://www.ezpizee.com/en/about/team/sokhon-pang.html",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/ezpizee/DrupalConnector/issues",
+    "source": "https://github.com/ezpizee/DrupalConnector"
+  },
+  "require": {
+    "drupal/core": "^8.8.0 || ^9.0"
+  }
+}
