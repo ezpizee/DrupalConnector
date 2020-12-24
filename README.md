@@ -32,6 +32,7 @@ REQUIREMENTS
 INSTALLATION
 ------------
 
+ * The module should be pulled and placed under */modules/custom/ezpz* folder
  * Install as you would normally install a contributed Drupal module.
    See: https://www.drupal.org/node/895232 for further information.
 
