@@ -1,5 +1,5 @@
 {
-  "name": "drupal/ezpz",
+  "name": "ezpizee/drupal-module",
   "description": "Ezpizee Drupal Connector",
   "type": "drupal-module",
   "keywords": ["Drupal", "Ezpizee", "E-commerce"],
