@@ -2,22 +2,42 @@
 
 namespace Drupal\ezpz_portal\Controller;
 
+use Drupal;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\ezpz_api\Controller\ContextProcessors\User\Profile\ContextProcessor;
+use Ezpizee\ConnectorUtils\Client;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Unirest\Request;
 
 class EzpizeePortalController extends ControllerBase
 {
+  /**
+   * @var ImmutableConfig
+   */
+  private $ezpzConfig;
+
+  private $mode = 'install';
+
+  /**
+   * @return Response
+   */
   public function portalSPA()
   {
     $this->checkAuthenticated();
-    // check if there's installed data -> get https://local-cdn.ezpz.solutions/adminui/0.0.1/index.drupal.html#/
-    // otherwise -> https://local-cdn.ezpz.solutions/install/html/index.drupal.html#/
-    Request::verifyPeer(false);
-    $resp = Request::get('https://local-cdn.ezpz.solutions/install/html/index.drupal.html');
-    $html = $resp->raw_body;
+    $this->ezpzConfig = Drupal::config('ezpz_portal.settings');
+    if ($this->ezpzConfig->get('client_id') &&
+      $this->ezpzConfig->get('client_secret') &&
+      $this->ezpzConfig->get('app_name') &&
+      $this->ezpzConfig->get('env')) {
+      $env = $this->ezpzConfig->get('env');
+      $cdnUrl = Client::cdnSchema($env).Client::cdnHost($env).Client::adminUri('drupal');
+      $this->mode = 'admin';
+    }
+    else {
+      $env = 'prod';
+      $cdnUrl = Client::cdnSchema($env).Client::cdnHost($env).Client::installUri('drupal');
+    }
+    $html = Client::getContentAsString($cdnUrl);
     $this->formatSPAOutput($html);
     return new Response(
       $html,
@@ -29,8 +49,8 @@ class EzpizeePortalController extends ControllerBase
   private function checkAuthenticated()
   {
     if (!$this->currentUser()->isAuthenticated()) {
-      $baseUrl = \Drupal::request()->getSchemeAndHttpHost();
-      $requestUri = \Drupal::request()->getRequestUri();
+      $baseUrl = Drupal::request()->getSchemeAndHttpHost();
+      $requestUri = Drupal::request()->getRequestUri();
       $response = new RedirectResponse($baseUrl . '/user/login?destination=' . $requestUri, 302);
       $response->send();
       return;
@@ -39,22 +59,23 @@ class EzpizeePortalController extends ControllerBase
 
   private function formatSPAOutput(&$spaHTMLContent): void
   {
-    $userProfileCP = new ContextProcessor();
-    $userProfileCP->exec();
-    $baseUrl = \Drupal::request()->getSchemeAndHttpHost();
-    $patterns = [
-      '{baseURL}',
-      '"{HHD_HEALTH_USER}"',
-      '{logout}',
-      "\n", "\r", "\t", "\s+"
-    ];
-    $replaces = [
-      \Drupal::request()->getSchemeAndHttpHost(),
-      json_encode($userProfileCP->getContextData()),
-      $baseUrl . '/user/logout',
-      "", "", ""
-    ];
-    $override = str_replace($patterns, $replaces, file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'hhd_health_override.js'));
+    $patterns = ["\n", "\r", "\t", "\s+"];
+    $replaces = ["", "", "", " "];
+    if (!empty($this->ezpzConfig)) {
+      $data = $this->ezpzConfig->getRawData();
+      foreach ($data as $key=>$val) {
+        $patterns[] = '{'.$key.'}';
+        $replaces[] = $val;
+      }
+    }
+    if ($this->mode === 'admin') {
+      $baseUrl = Drupal::request()->getSchemeAndHttpHost();
+      $requestUri = Drupal::request()->getRequestUri();
+      $patterns[] = '{loginPageRedirectUrl}';
+      $replaces[] = $baseUrl . '/user/login?destination=' . $requestUri;
+    }
+    $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR;
+    $override = str_replace($patterns, $replaces, file_get_contents($dir . 'ezpz_'.$this->mode.'_override.js'));
     $spaHTMLContent = str_replace('<' . 'head>', '<' . 'head' . '><' . 'script>' . $override . '</' . 'script>', $spaHTMLContent);
   }
 }

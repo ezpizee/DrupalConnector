@@ -1,0 +1,18 @@
+# Schema for the configuration files of the Ezpizee Portal module.
+
+ezpz_portal.settings:
+  type: config_object
+  label: 'Ezpizee Portal Settings'
+  mapping:
+    client_id:
+      type: string
+      label: 'Client ID'
+    client_secret:
+      type: string
+      label: 'Client Secret'
+    app_name:
+      type: string
+      label: 'App Name'
+    env:
+      type: string
+      label: 'Environment'

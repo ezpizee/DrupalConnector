@@ -1,3 +1,11 @@
+entity.ezpz_portal.collection:
+  path: '/admin/config/services/ezpz/portal'
+  defaults:
+    _form: '\Drupal\ezpz_portal\Form\EzpzPortalConfigForm'
+    _title: 'Ezpizee Portal Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
 ezpz_portal.content:
   path: /ezpizee/portal
   defaults:

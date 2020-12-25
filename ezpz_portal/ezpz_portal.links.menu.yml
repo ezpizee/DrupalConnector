@@ -1,0 +1,11 @@
+ezpz_portal.view:
+  title: Ezpizee Portal
+  route_name: ezpz_portal.view
+  enabled: 0
+
+entity.ezpz_portal.collection:
+  title: 'Ezpizee Portal'
+  parent: system.admin_config_services
+  description: 'For Ezpizee e-commerce portal configuration'
+  route_name: entity.ezpz_portal.collection
+  weight: -11

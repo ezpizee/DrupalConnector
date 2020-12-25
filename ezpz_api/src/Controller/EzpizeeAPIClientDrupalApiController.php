@@ -15,7 +15,11 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
    * @var Client
    */
   private $microserviceClient;
-  private $endpoints = [];
+  private $endpoints = [
+    '/api/v1/drupal/refresh/token' => 'Drupal\ezpz_api\Controller\ContextProcessors\RefreshToken',
+    '/api/v1/drupal/expire-in' => 'Drupal\ezpz_api\Controller\ContextProcessors\ExpireIn',
+    '/api/v1/drupal/authenticated-user' => 'Drupal\ezpz_api\Controller\ContextProcessors\AuthenticatedUser'
+  ];
 
   public function __construct(Client $client)
   {
