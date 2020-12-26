@@ -33,23 +33,29 @@ INSTALLATION
 
  1) Download the module, or pulled, and placed under */modules/custom* folder
  
- 2) At the root of your Drupal environment, run the following composer commands, to install the dependencies:
-   * *composer require mashape/unirest-php*
-   * *composer require ezpizee/connector-utils "dev-master"*
-   * *composer require ezpizee/utils "dev-master"*
-   * *composer require ezpizee/microservices-utils "dev-master"*
-   
- 3) Go to *Manage &gt; Extend (/admin/modules)*
-   * Check *Ezpizee API Client on Drupal*
-   * Check *Ezpizee Portal on Drupal*
-   * Click *Install* button (bottom of the page)
+ 2) At the root of your Drupal environment, run the following composer commands, to install the dependencies
+    ```
+    composer require mashape/unirest-php
+    composer require ezpizee/connector-utils "dev-master"
+    composer require ezpizee/utils "dev-master"
+    composer require ezpizee/microservices-utils "dev-master"
+    ```
+
+ 3) Go to **Manage &gt; Extend** (/admin/modules)
+    * Check **Ezpizee API Client on Drupal**
+    * Check **Ezpizee Portal on Drupal**
+    * Click **Install** button (bottom of the page)
 
  4) Go to *Manage &gt; Configuration (/admin/config)*
-   * Under *WEB SERVICES*, click on *Ezpizee Portal*
-   * Fill in the value for Client ID, Client Secret, App Name
-   * Select the Environment to integrate with Ezpizee (if not sure, select *Production*)
-   * Click *Save Configuration*
+    * Under **WEB SERVICES**, click on **Ezpizee Portal**
+    * Fill in the value for 
+      * **Client ID** (obtain from https://www.ezpizee.com/en/user/admin-ui.html),
+      * **Client Secret** (obtain from https://www.ezpizee.com/en/user/admin-ui.html),
+      * **App Name** (a unique name that is not already been used in any other Ezpizee installation)
+    * Select the Environment to integrate with Ezpizee (when not sure, select **Production**)
+    * Click **Save Configuration**
 
+ 5) Click on the *Ezpizee Portal* from Drupal admin menu
 
 MAINTAINERS
 -----------
