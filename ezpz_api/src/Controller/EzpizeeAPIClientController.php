@@ -42,7 +42,7 @@ class EzpizeeAPIClientController extends ControllerBase
         Client::KEY_TOKEN_URI => Client::getTokenUri(),
         Client::KEY_APP_NAME => $this->ezpzConfig->get(Client::KEY_APP_NAME),
         Client::KEY_ENV => $env,
-        Client::KEY_ACCESS_TOKEN => 'ezpz_access_token'
+        Client::KEY_ACCESS_TOKEN => Client::DEFAULT_ACCESS_TOKEN_KEY
       ]);
       $this->request = Drupal::request();
       $this->client = new Client(Client::apiSchema($env), Client::apiHost($env), $microserviceConfig);

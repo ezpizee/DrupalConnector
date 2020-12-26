@@ -86,7 +86,7 @@ class EzpzPortalConfigForm extends ConfigFormBase {
       Client::KEY_ENV => $form_state->getValue(Client::KEY_ENV)
     ];
 
-    $response = Client::install('ezpz_access_token', $data);
+    $response = Client::install(Client::DEFAULT_ACCESS_TOKEN_KEY, $data);
 
     if (!empty($response)) {
       if (isset($response['code']) && (int)$response['code'] !== 200) {
