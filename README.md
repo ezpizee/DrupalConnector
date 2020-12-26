@@ -33,6 +33,13 @@ INSTALLATION
 ------------
 
  * The module should be pulled and placed under */modules/custom/ezpz* folder
+ 
+ * At the root of your Drupal environment, run the following composer commands, to install the dependencies:
+   * *composer require mashape/unirest-php*
+   * *composer require ezpizee/connector-utils "dev-master"*
+   * *composer require ezpizee/utils "dev-master"*
+   * *composer require ezpizee/microservices-utils "dev-master"*
+   
  * Install as you would normally install a contributed Drupal module.
    See: https://www.drupal.org/node/895232 for further information.
 
