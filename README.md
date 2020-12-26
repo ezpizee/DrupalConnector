@@ -61,6 +61,6 @@ MAINTAINERS
 -----------
 
 Current maintainers:
- * Sothea Nim - https://www.ezpizee.com/en/about/team/sothea-nim.html
- * Sokhon Pang - https://www.ezpizee.com/en/about/team/sokhon-pang.html
+ * Sothea Nim - https://github.com/nimsothea
+ * Sokhon Pang - https://github.com/pangkhon
 
