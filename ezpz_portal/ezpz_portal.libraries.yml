@@ -1,0 +1,4 @@
+ezpz_portal_style:
+  css:
+    theme:
+      css/ezpz_portal.icons.css: {}

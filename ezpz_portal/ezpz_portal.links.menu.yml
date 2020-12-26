@@ -9,3 +9,10 @@ entity.ezpz_portal.collection:
   description: 'For Ezpizee e-commerce portal configuration'
   route_name: entity.ezpz_portal.collection
   weight: -11
+
+entity.ezpz_portal_link.collection:
+  title: Ezpizee Portal
+  route_name: ezpz_portal.content
+  description: 'Manage Ezpizee e-commerce components'
+  parent: system.admin
+  weight: 10

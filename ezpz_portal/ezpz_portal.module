@@ -14,3 +14,10 @@ function ezpz_portal_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+function ezpz_portal_toolbar() {
+  $items['ezpz_portal'] = [
+    '#attached' => ['library' => ['ezpz_portal/ezpz_portal_style']],
+  ];
+  return $items;
+}

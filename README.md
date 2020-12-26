@@ -4,7 +4,6 @@ CONTENTS OF THIS FILE
  * Introduction
  * Requirements
  * Installation
- * Configuration
  * Maintainers
 
 
@@ -32,25 +31,24 @@ REQUIREMENTS
 INSTALLATION
 ------------
 
- * The module should be pulled and placed under */modules/custom/ezpz* folder
+ 1) Download the module, or pulled, and placed under */modules/custom* folder
  
- * At the root of your Drupal environment, run the following composer commands, to install the dependencies:
+ 2) At the root of your Drupal environment, run the following composer commands, to install the dependencies:
    * *composer require mashape/unirest-php*
    * *composer require ezpizee/connector-utils "dev-master"*
    * *composer require ezpizee/utils "dev-master"*
    * *composer require ezpizee/microservices-utils "dev-master"*
    
- * Install as you would normally install a contributed Drupal module.
-   See: https://www.drupal.org/node/895232 for further information.
+ 3) Go to *Manage &gt; Extend (/admin/modules)*
+   * Check *Ezpizee API Client on Drupal*
+   * Check *Ezpizee Portal on Drupal*
+   * Click *Install* button (bottom of the page)
 
-
-CONFIGURATION
--------------
-
-You will need the following information to configure after the Drupal module is installed:
-
- * Ezpizee's Client ID
- * Ezpizee's Client Secret
+ 4) Go to *Manage &gt; Configuration (/admin/config)*
+   * Under *WEB SERVICES*, click on *Ezpizee Portal*
+   * Fill in the value for Client ID, Client Secret, App Name
+   * Select the Environment to integrate with Ezpizee (if not sure, select *Production*)
+   * Click *Save Configuration*
 
 
 MAINTAINERS
