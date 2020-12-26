@@ -33,10 +33,14 @@ INSTALLATION
 
  1) Download the module, or pulled, and placed under */modules/custom* folder
  
- 2) At the root of your Drupal environment, run the following composer commands, to install the dependencies
+ 2) At the root of your Drupal environment, run the following composer commands, to install the dependencies:
+    ```
+    composer require ezpizee/connector-utils "dev-master"
+    ```
+    
+    *IF THERE ARE DEPENDENCIES MISSING ISSUE, install the following dependencies:*
     ```
     composer require mashape/unirest-php
-    composer require ezpizee/connector-utils "dev-master"
     composer require ezpizee/utils "dev-master"
     composer require ezpizee/microservices-utils "dev-master"
     ```
