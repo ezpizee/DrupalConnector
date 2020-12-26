@@ -2,8 +2,10 @@
 
 namespace Drupal\ezpz_portal\Form;
 
+use Drupal;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Ezpizee\ConnectorUtils\Client;
 
 /**
  * Configure RSS settings for this site
@@ -76,14 +78,39 @@ class EzpzPortalConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('ezpz_portal.settings')
-      ->set('client_id', $form_state->getValue('client_id'))
-      ->set('client_secret', $form_state->getValue('client_secret'))
-      ->set('app_name', $form_state->getValue('app_name'))
-      ->set('env', $form_state->getValue('env'))
-      ->save();
 
-    parent::submitForm($form, $form_state);
+    $data = [
+      Client::KEY_CLIENT_ID => $form_state->getValue(Client::KEY_CLIENT_ID),
+      Client::KEY_CLIENT_SECRET => $form_state->getValue(Client::KEY_CLIENT_SECRET),
+      Client::KEY_APP_NAME => $form_state->getValue(Client::KEY_APP_NAME),
+      Client::KEY_ENV => $form_state->getValue(Client::KEY_ENV)
+    ];
+
+    $response = Client::install('ezpz_access_token', $data);
+
+    if (!empty($response)) {
+      if (isset($response['code']) && (int)$response['code'] !== 200) {
+        if ($response['message']==='ITEM_ALREADY_EXISTS') {
+          Drupal::messenger()->addMessage('App Name is already taken. Give a different name and try again.');
+        }
+        else {
+          Drupal::messenger()->addMessage($response['message']);
+        }
+      }
+      else {
+        $this->config('ezpz_portal.settings')
+          ->set('client_id', $form_state->getValue('client_id'))
+          ->set('client_secret', $form_state->getValue('client_secret'))
+          ->set('app_name', $form_state->getValue('app_name'))
+          ->set('env', $form_state->getValue('env'))
+          ->save();
+
+        parent::submitForm($form, $form_state);
+      }
+    }
+    else {
+      Drupal::messenger()->addMessage('Failed to install Ezpizee App');
+    }
   }
 
 }

@@ -3,6 +3,7 @@
 namespace Drupal\ezpz_api\Controller\ContextProcessors\ExpireIn;
 
 use Drupal\ezpz_api\Controller\ContextProcessors\BaseContextProcessor;
+use Ezpizee\MicroservicesClient\Client;
 
 class ContextProcessor extends BaseContextProcessor
 {
@@ -11,6 +12,7 @@ class ContextProcessor extends BaseContextProcessor
   public function validRequiredParams(): bool {return true;}
 
   public function exec(): void {
-    $this->setContextData([]);
+    $expireIn = $this->microserviceClient->getExpireIn($this->microserviceClient->getConfig(Client::KEY_ACCESS_TOKEN));
+    $this->setContextData(['expire_in', $expireIn]);
   }
 }

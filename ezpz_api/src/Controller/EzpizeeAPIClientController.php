@@ -5,7 +5,6 @@ namespace Drupal\ezpz_api\Controller;
 use Drupal;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ImmutableConfig;
-use Drupal\Core\Site\Settings;
 use Ezpizee\ConnectorUtils\Client;
 use Drupal\ezpz_api\Controller\ContextProcessors\User\Profile\ContextProcessor as UserProfileCP;
 use Ezpizee\MicroservicesClient\Config;
@@ -32,28 +31,31 @@ class EzpizeeAPIClientController extends ControllerBase
   public function __construct()
   {
     $this->ezpzConfig = Drupal::config('ezpz_portal.settings');
-    if ($this->ezpzConfig->get('client_id') &&
-      $this->ezpzConfig->get('client_secret') &&
-      $this->ezpzConfig->get('app_name') &&
-      $this->ezpzConfig->get('env')) {
-      $env = $this->ezpzConfig->get('env');
+    if ($this->ezpzConfig->get(Client::KEY_CLIENT_ID) &&
+      $this->ezpzConfig->get(Client::KEY_CLIENT_SECRET) &&
+      $this->ezpzConfig->get(Client::KEY_APP_NAME) &&
+      $this->ezpzConfig->get(Client::KEY_ENV)) {
+      $env = $this->ezpzConfig->get(Client::KEY_ENV);
       $microserviceConfig = new Config([
-        'client_id' => $this->ezpzConfig->get('client_id'),
-        'client_secret' => $this->ezpzConfig->get('client_secret'),
-        'token_uri' => Client::getTokenUri(),
-        'app_name' => $this->ezpzConfig->get('app_name'),
-        'env' => $env
+        Client::KEY_CLIENT_ID => $this->ezpzConfig->get(Client::KEY_CLIENT_ID),
+        Client::KEY_CLIENT_SECRET => $this->ezpzConfig->get(Client::KEY_CLIENT_SECRET),
+        Client::KEY_TOKEN_URI => Client::getTokenUri(),
+        Client::KEY_APP_NAME => $this->ezpzConfig->get(Client::KEY_APP_NAME),
+        Client::KEY_ENV => $env,
+        Client::KEY_ACCESS_TOKEN => 'ezpz_access_token'
       ]);
       $this->request = Drupal::request();
       $this->client = new Client(Client::apiSchema($env), Client::apiHost($env), $microserviceConfig);
       $this->client->setPlatform('drupal');
       $this->client->setPlatformVersion(Drupal::VERSION);
+      $this->addHeaderRequest('user_id', Drupal::currentUser()->id());
       if ($env === 'local') {
         $this->client->verifyPeer(false);
       }
-      // added user request
-      $this->addHeaderRequest('user_id', Drupal::currentUser()->id());
       $this->uri = $this->request->query->get('endpoint');
+      if ($this->uri && $this->uri[0] !== '/') {
+        $this->uri = str_replace('//', '/', '/'.$this->uri);
+      }
       $this->method = $this->request->getMethod();
       $this->contentType = $this->request->headers->get('content-type');
       $this->body = empty($this->request->request->all()) ? json_decode($this->request->getContent(), true) : $this->request->request->all();
@@ -66,7 +68,7 @@ class EzpizeeAPIClientController extends ControllerBase
   public function restApiClient(): JsonResponse
   {
     if (!empty($this->uri)) {
-      if (StringUtil::startsWith($this->uri, "api/v1/drupal/") || StringUtil::startsWith($this->uri, "/api/v1/drupal/")) {
+      if (StringUtil::startsWith($this->uri, "/api/v1/drupal/")) {
         return $this->requestToDrupal();
       }
       return $this->requestToMicroServices();
