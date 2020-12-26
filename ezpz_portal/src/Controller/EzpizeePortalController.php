@@ -32,18 +32,20 @@ class EzpizeePortalController extends ControllerBase
       $env = $this->ezpzConfig->get('env');
       $cdnUrl = Client::cdnSchema($env).Client::cdnHost($env).Client::adminUri('drupal');
       $this->mode = 'admin';
+      $html = Client::getContentAsString($cdnUrl);
+      $this->formatSPAOutput($html);
+      return new Response(
+        $html,
+        Response::HTTP_OK,
+        array('content-type' => 'text/html; charset=UTF-8')
+      );
     }
     else {
-      $env = 'prod';
-      $cdnUrl = Client::cdnSchema($env).Client::cdnHost($env).Client::installUri('drupal');
+      $baseUrl = Drupal::request()->getSchemeAndHttpHost();
+      $response = new RedirectResponse($baseUrl . '/admin/config/services/ezpz/portal', 302);
+      $response->send();
+      return $response;
     }
-    $html = Client::getContentAsString($cdnUrl);
-    $this->formatSPAOutput($html);
-    return new Response(
-      $html,
-      Response::HTTP_OK,
-      array('content-type' => 'text/html; charset=UTF-8')
-    );
   }
 
   private function checkAuthenticated()
