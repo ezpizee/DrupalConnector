@@ -36,8 +36,8 @@ class EzpzPortalConfigForm extends ConfigFormBase {
     $form['client_id'] = [
       '#type' => 'textfield',
       '#title' => t('Client ID'),
-      '#default_value' => $ezpzPortalConfig->get('client_id'),
-      '#description' => t('Ezpizee\'s Client ID, which can be obtained from www.ezpizee.com'),
+      '#default_value' => $form_state->getValue(Client::KEY_CLIENT_ID, $ezpzPortalConfig->get(Client::KEY_CLIENT_ID)),
+      '#description' => $this->t('Ezpizee\'s Client ID, which can be obtained from www.ezpizee.com'),
       '#required' => TRUE,
       '#size' => 32,
       '#maxlength' => 32
@@ -45,8 +45,8 @@ class EzpzPortalConfigForm extends ConfigFormBase {
     $form['client_secret'] = [
       '#type' => 'textfield',
       '#title' => t('Client Secret'),
-      '#default_value' => $ezpzPortalConfig->get('client_secret'),
-      '#description' => t('Ezpizee\'s Client Secret, which can be obtained from www.ezpizee.com'),
+      '#default_value' => $form_state->getValue(Client::KEY_CLIENT_SECRET, $ezpzPortalConfig->get(Client::KEY_CLIENT_SECRET)),
+      '#description' => $this->t('Ezpizee\'s Client Secret, which can be obtained from www.ezpizee.com'),
       '#required' => TRUE,
       '#size' => 32,
       '#maxlength' => 32
@@ -54,13 +54,13 @@ class EzpzPortalConfigForm extends ConfigFormBase {
     $form['app_name'] = [
       '#type' => 'textfield',
       '#title' => t('App Name'),
-      '#default_value' => $ezpzPortalConfig->get('app_name'),
-      '#description' => t('You can name any unique name, for this installation, which hasn\'t been used in any installation yet'),
+      '#default_value' => $form_state->getValue(Client::KEY_APP_NAME, $ezpzPortalConfig->get(Client::KEY_APP_NAME)),
+      '#description' => $this->t('You can name any unique name, for this installation, which hasn\'t been used in any installation yet'),
       '#required' => TRUE,
       '#size' => 60,
       '#maxlength' => 255
     ];
-    $env = $ezpzPortalConfig->get('env');
+    $env = $form_state->getValue(Client::KEY_ENV, $ezpzPortalConfig->get(Client::KEY_ENV));
     $options = [''=>'Select environment', 'local'=>'Local', 'dev'=>'Development', 'stage'=>'Staging', 'prod'=>'Production'];
     $form['env'] = [
       '#type' => 'select',
