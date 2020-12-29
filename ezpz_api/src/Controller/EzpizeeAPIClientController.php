@@ -9,6 +9,7 @@ use Ezpizee\ConnectorUtils\Client;
 use Drupal\ezpz_api\Controller\ContextProcessors\User\Profile\ContextProcessor as UserProfileCP;
 use Ezpizee\MicroservicesClient\Config;
 use Ezpizee\Utils\StringUtil;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -45,7 +46,8 @@ class EzpizeeAPIClientController extends ControllerBase
         Client::KEY_ACCESS_TOKEN => Client::DEFAULT_ACCESS_TOKEN_KEY
       ]);
       $this->request = Drupal::request();
-      $this->client = new Client(Client::apiSchema($env), Client::apiHost($env), $microserviceConfig);
+      $host = Client::apiHost($env);
+      $this->client = new Client(Client::apiSchema($env), $host, $microserviceConfig);
       $this->client->setPlatform('drupal');
       $this->client->setPlatformVersion(Drupal::VERSION);
       $this->addHeaderRequest('user_id', Drupal::currentUser()->id());
@@ -85,7 +87,7 @@ class EzpizeeAPIClientController extends ControllerBase
   {
     $drupalApi = new EzpizeeAPIClientDrupalApiController($this->client);
     $res = $drupalApi->load($this->method, $this->uri);
-    return new JsonResponse($res, $res['code']);
+    return new JsonResponse($res, isset($res['code'])?$res['code']:200);
   }
 
   private function requestToMicroServices(): JsonResponse
@@ -102,6 +104,12 @@ class EzpizeeAPIClientController extends ControllerBase
       return new JsonResponse($res, $res['code']);
     }
     else if ($this->method === 'POST') {
+
+      // validate csrf token
+      if (Drupal::csrfToken()->get() !== $this->request->headers->get('CSRF-Token')) {
+        return new JsonResponse(['message'=>'Invalid CSRF Token','code'=>422,'status'=>'Error'], 422);
+      }
+
       if (isset($this->contentType) && $this->contentType === 'application/json') {
         $response = $this->client->post($this->uri, $this->body);
         $res = json_decode($response, true);

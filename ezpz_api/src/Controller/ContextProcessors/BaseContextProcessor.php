@@ -34,13 +34,12 @@ abstract class BaseContextProcessor
 
   protected final function getUriParam($key): string {return RequestEndpointValidator::getUriParam($key);}
 
+  public final function setContext(array $context) {$this->context = $context;}
   public final function setContextData(array $data) {$this->context['data']=$data;}
   public final function setContextCode(int $code) {$this->context['code']=$code;}
   public final function setContextMessage(string $msg) {$this->context['message']=$msg;}
 
-  public final function getContext(): array {
-      return $this->context;
-  }
+  public final function getContext(): array {return $this->context;}
 
   public final function getContextCode(): int {return $this->context['code'];}
   public final function getContextMessage(): string {return $this->context['message'];}

@@ -9,5 +9,7 @@ var EzpzOverrideEndpoints = {
   "expire_in":"/ezpizee/api/client?endpoint=/api/v1/drupal/expire-in",
   "get_auth":"/ezpizee/api/client?endpoint=/api/v1/drupal/authenticated-user",
   "loginPageRedirectUrl":"{loginPageRedirectUrl}",
-  "installPageRedirectUrl":"/"
+  "installPageRedirectUrl":"/",
+  "csrfToken": "/ezpizee/api/client?endpoint=/api/v1/drupal/crsf-token",
+  "scriptUrlRegex": /^(?:http|https):\/\/[^/]+(\/.*)\/(\/sites\/default\/).*\.js(\?.*)?$/
 };

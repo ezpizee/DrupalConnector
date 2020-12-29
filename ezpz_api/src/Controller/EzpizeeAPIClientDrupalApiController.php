@@ -18,7 +18,8 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
   private $endpoints = [
     '/api/v1/drupal/refresh/token' => 'Drupal\ezpz_api\Controller\ContextProcessors\RefreshToken',
     '/api/v1/drupal/expire-in' => 'Drupal\ezpz_api\Controller\ContextProcessors\ExpireIn',
-    '/api/v1/drupal/authenticated-user' => 'Drupal\ezpz_api\Controller\ContextProcessors\AuthenticatedUser'
+    '/api/v1/drupal/authenticated-user' => 'Drupal\ezpz_api\Controller\ContextProcessors\AuthenticatedUser',
+    '/api/v1/drupal/crsf-token' => 'Drupal\ezpz_api\Controller\ContextProcessors\CRSFToken'
   ];
 
   public function __construct(Client $client)
