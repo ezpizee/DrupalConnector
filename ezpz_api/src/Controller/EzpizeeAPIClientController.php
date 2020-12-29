@@ -9,7 +9,6 @@ use Ezpizee\ConnectorUtils\Client;
 use Drupal\ezpz_api\Controller\ContextProcessors\User\Profile\ContextProcessor as UserProfileCP;
 use Ezpizee\MicroservicesClient\Config;
 use Ezpizee\Utils\StringUtil;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -104,13 +103,8 @@ class EzpizeeAPIClientController extends ControllerBase
       return new JsonResponse($res, $res['code']);
     }
     else if ($this->method === 'POST') {
-
-      // validate csrf token
-      if (Drupal::csrfToken()->get() !== $this->request->headers->get('CSRF-Token')) {
-        return new JsonResponse(['message'=>'Invalid CSRF Token','code'=>422,'status'=>'Error'], 422);
-      }
-
-      if (isset($this->contentType) && $this->contentType === 'application/json') {
+      $this->validateCSRFToken();
+      if (isset($this->contentType) && strpos($this->contentType, 'application/json') !== false) {
         $response = $this->client->post($this->uri, $this->body);
         $res = json_decode($response, true);
         return new JsonResponse($res, $res['code']);
@@ -131,7 +125,8 @@ class EzpizeeAPIClientController extends ControllerBase
       }
     }
     else if ($this->method === 'PUT') {
-      if (isset($this->contentType) && $this->contentType === 'application/json') {
+      $this->validateCSRFToken();
+      if (isset($this->contentType) && strpos($this->contentType, 'application/json') !== false) {
         $response = $this->client->put($this->uri, $this->body);
         $res = json_decode($response, true);
         return new JsonResponse($res, $res['code']);
@@ -141,17 +136,25 @@ class EzpizeeAPIClientController extends ControllerBase
       }
     }
     else if ($this->method === 'DELETE') {
+      $this->validateCSRFToken();
       $response = $this->client->delete($this->uri, $this->body);
       $res = json_decode($response, true);
       return new JsonResponse($res, $res['code']);
     }
     else if ($this->method === 'PATCH') {
+      $this->validateCSRFToken();
       $response = $this->client->patch($this->uri, $this->body);
       $res = json_decode($response, true);
       return new JsonResponse($res, $res['code']);
     }
     else {
       return new JsonResponse(null, Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+  }
+
+  private function validateCSRFToken(){
+    if (Drupal::csrfToken()->get() !== $this->request->headers->get('CSRF-Token')) {
+      return new JsonResponse(['message'=>'Invalid CSRF Token','code'=>422,'status'=>'Error'], 422);
     }
   }
 
