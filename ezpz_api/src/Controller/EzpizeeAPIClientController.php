@@ -91,6 +91,7 @@ class EzpizeeAPIClientController extends ControllerBase
 
   private function requestToMicroServices(): JsonResponse
   {
+    $res = ['status'=>'ERROR', 'code'=>Response::HTTP_METHOD_NOT_ALLOWED, 'data'=>null, 'message'=>'HTTP_METHOD_NOT_ALLOWED'];
     if ($this->method === 'GET') {
       $response = $this->client->get($this->uri);
       $res = json_decode($response, true);
@@ -100,28 +101,25 @@ class EzpizeeAPIClientController extends ControllerBase
         $res['data']['created_by'] = $userInfo;
         $res['data']['modified_by'] = $userInfo;
       }
-      return new JsonResponse($res, $res['code']);
     }
     else if ($this->method === 'POST') {
       $this->validateCSRFToken();
       if (isset($this->contentType) && strpos($this->contentType, 'application/json') !== false) {
+        //die(json_encode([$this->uri, $this->body]));
         $response = $this->client->post($this->uri, $this->body);
         $res = json_decode($response, true);
-        return new JsonResponse($res, $res['code']);
       }
       else if (isset($this->contentType) && strpos($this->contentType, 'multipart/form-data;') !== false) {
         if ($this->hasFileUploaded()) {
           $response = $this->submitFormDataWithFile();
           $res = json_decode($response, true);
-          return new JsonResponse($res, $res['code']);
         } else {
           $response = $this->submitFormData();
           $res = json_decode($response, true);
-          return new JsonResponse($res, $res['code']);
         }
       }
       else {
-        return new JsonResponse(null, Response::HTTP_UNPROCESSABLE_ENTITY);
+        $res['message'] = 'INVALID_CONTENT_TYPE';
       }
     }
     else if ($this->method === 'PUT') {
@@ -129,27 +127,23 @@ class EzpizeeAPIClientController extends ControllerBase
       if (isset($this->contentType) && strpos($this->contentType, 'application/json') !== false) {
         $response = $this->client->put($this->uri, $this->body);
         $res = json_decode($response, true);
-        return new JsonResponse($res, $res['code']);
       }
       else {
-        return new JsonResponse(null, Response::HTTP_UNPROCESSABLE_ENTITY);
+        $res['message'] = 'INVALID_CONTENT_TYPE';
       }
     }
     else if ($this->method === 'DELETE') {
       $this->validateCSRFToken();
       $response = $this->client->delete($this->uri, $this->body);
       $res = json_decode($response, true);
-      return new JsonResponse($res, $res['code']);
     }
     else if ($this->method === 'PATCH') {
       $this->validateCSRFToken();
       $response = $this->client->patch($this->uri, $this->body);
       $res = json_decode($response, true);
-      return new JsonResponse($res, $res['code']);
     }
-    else {
-      return new JsonResponse(null, Response::HTTP_METHOD_NOT_ALLOWED);
-    }
+
+    return new JsonResponse($res, isset($res['code']) ? $res['code'] : 200);
   }
 
   private function validateCSRFToken(){
