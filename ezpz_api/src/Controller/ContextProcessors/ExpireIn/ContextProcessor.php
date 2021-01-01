@@ -2,11 +2,15 @@
 
 namespace Drupal\ezpz_api\Controller\ContextProcessors\ExpireIn;
 
-use Drupal\ezpz_api\Controller\ContextProcessors\BaseContextProcessor;
+use Ezpizee\ContextProcessor\Base as BaseContextProcessor;
 use Ezpizee\MicroservicesClient\Client;
 
 class ContextProcessor extends BaseContextProcessor
 {
+  public function requiredAccessToken(): bool {return false;}
+
+  public function isSystemUser(): bool {return false;}
+
   public function methods(): array {return ['GET'];}
 
   public function validRequiredParams(): bool {return true;}

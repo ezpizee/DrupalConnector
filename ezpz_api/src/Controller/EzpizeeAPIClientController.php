@@ -97,6 +97,11 @@ class EzpizeeAPIClientController extends ControllerBase
       $res = json_decode($response, true);
       if (isset($res['data']) && isset($res['data']['created_by'])) {
         $userProfileCP = new UserProfileCP($this->client);
+        $requestData = empty(Drupal::request()->request->all())
+          ? json_decode(Drupal::request()->getContent(), true)
+          : Drupal::request()->request->all();
+        $userProfileCP->setRequestData(empty($requestData)?[]:$requestData);
+
         $userInfo = $userProfileCP->getUserInfoById((int)$res['data']['created_by']);
         $res['data']['created_by'] = $userInfo;
         $res['data']['modified_by'] = $userInfo;

@@ -2,6 +2,7 @@
 
 namespace Drupal\ezpz_api\Controller;
 
+use Drupal;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\ezpz_api\Controller\ContextProcessors\BaseContextProcessor;
 use Ezpizee\MicroservicesClient\Client;
@@ -44,6 +45,10 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
         $class->setContextCode(422);
         return $class->getContext();
       } else {
+        $requestData = empty(Drupal::request()->request->all())
+          ? json_decode(Drupal::request()->getContent(), true)
+          : Drupal::request()->request->all();
+        $class->setRequestData(empty($requestData)?[]:$requestData);
         $class->exec();
         return $class->getContext();
       }
