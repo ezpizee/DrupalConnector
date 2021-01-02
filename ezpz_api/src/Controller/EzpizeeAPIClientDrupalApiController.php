@@ -34,7 +34,7 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
     $uri = str_replace('//', '/', '/'.$uri);
     RequestEndpointValidator::validate($uri, $this->endpoints);
     $namespace = RequestEndpointValidator::getContextProcessorNamespace();
-    $class = new $namespace($this->microserviceClient);
+    $class = new $namespace();
     if ($class instanceof BaseContextProcessor) {
       if (!in_array($method, $class->allowedMethods())) {
         $class->setContextCode(405);
@@ -45,6 +45,7 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
         $class->setContextCode(422);
         return $class->getContext();
       } else {
+        $class->setMicroServiceClient($this->microserviceClient);
         $requestData = empty(Drupal::request()->request->all())
           ? json_decode(Drupal::request()->getContent(), true)
           : Drupal::request()->request->all();
