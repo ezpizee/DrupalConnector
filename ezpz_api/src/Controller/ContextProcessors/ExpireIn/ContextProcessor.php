@@ -14,7 +14,8 @@ class ContextProcessor extends BaseContextProcessor
   protected function validRequiredParams(): bool {return true;}
 
   public function processContext(): void {
-    $expireIn = $this->microserviceClient->getExpireIn($this->microserviceClient->getConfig(Client::KEY_ACCESS_TOKEN));
-    $this->setContextData(['expire_in', $expireIn]);
+    $tokenKey = $this->microserviceClient->getConfig(Client::KEY_ACCESS_TOKEN);
+    $token = $this->microserviceClient->getToken($tokenKey);
+    $this->setContextData(['expire_in', $token->getExpireIn()]);
   }
 }
