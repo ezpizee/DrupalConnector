@@ -36,7 +36,7 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
     $namespace = RequestEndpointValidator::getContextProcessorNamespace();
     $class = new $namespace($this->microserviceClient);
     if ($class instanceof BaseContextProcessor) {
-      if (!in_array($method, $class->methods())) {
+      if (!in_array($method, $class->allowedMethods())) {
         $class->setContextCode(405);
         $class->setContextMessage('Method not allowed');
         return $class->getContext();
