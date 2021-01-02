@@ -3,6 +3,7 @@
 namespace Drupal\ezpz_api\Controller\ContextProcessors\RefreshToken;
 
 use Drupal\ezpz_api\Controller\ContextProcessors\BaseContextProcessor;
+use Ezpizee\MicroservicesClient\Client;
 
 class ContextProcessor extends BaseContextProcessor
 {
@@ -13,7 +14,13 @@ class ContextProcessor extends BaseContextProcessor
   protected function validRequiredParams(): bool {return true;}
 
   public function processContext(): void {
-    $this->setContextData([]);
-    die('/api/user/token/refresh/737CE9B5-B5CB-4F35-BB25-A35B02479A8C/1');
+    $tokenKey = $this->microserviceClient->getConfig(Client::KEY_ACCESS_TOKEN);
+    $token = $this->microserviceClient->getToken($tokenKey);
+    $this->microserviceClient->setRefreshToken(true);
+    $tokenUUID = $token->getTokenUUID();
+    $uri = '/api/user/token/refresh/' . $tokenUUID . '/' . $token->getUser('id');
+    $response = $this->microserviceClient->post($uri, [])->getAsArray();
+    $this->microserviceClient->setRefreshToken(false);
+    $this->setContextData($response);
   }
 }

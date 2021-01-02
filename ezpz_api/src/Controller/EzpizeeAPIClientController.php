@@ -8,6 +8,7 @@ use Drupal\Core\Config\ImmutableConfig;
 use Ezpizee\ConnectorUtils\Client;
 use Drupal\ezpz_api\Controller\ContextProcessors\User\Profile\ContextProcessor as UserProfileCP;
 use Ezpizee\MicroservicesClient\Config;
+use Ezpizee\Utils\ResponseCodes;
 use Ezpizee\Utils\StringUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +47,8 @@ class EzpizeeAPIClientController extends ControllerBase
       ]);
       $this->request = Drupal::request();
       $host = Client::apiHost($env);
-      $this->client = new Client(Client::apiSchema($env), $host, $microserviceConfig);
+      $tokenHandler = 'Drupal\ezpz_api\Controller\ContextProcessors\TokenHandler';
+      $this->client = new Client(Client::apiSchema($env), $host, $microserviceConfig, $tokenHandler);
       $this->client->setPlatform('drupal');
       $this->client->setPlatformVersion(Drupal::VERSION);
       $this->addHeaderRequest('user_id', Drupal::currentUser()->id());
@@ -85,13 +87,18 @@ class EzpizeeAPIClientController extends ControllerBase
   private function requestToDrupal(): JsonResponse
   {
     $drupalApi = new EzpizeeAPIClientDrupalApiController($this->client);
-    $res = $drupalApi->load($this->method, $this->uri);
+    $res = $drupalApi->load($this->uri);
     return new JsonResponse($res, isset($res['code'])?$res['code']:200);
   }
 
   private function requestToMicroServices(): JsonResponse
   {
-    $res = ['status'=>'ERROR', 'code'=>Response::HTTP_METHOD_NOT_ALLOWED, 'data'=>null, 'message'=>'HTTP_METHOD_NOT_ALLOWED'];
+    $res = [
+      'status'=>'ERROR',
+      'code'=>ResponseCodes::CODE_METHOD_NOT_ALLOWED,
+      'data'=>null,
+      'message'=>ResponseCodes::MESSAGE_ERROR_INVALID_METHOD
+    ];
     if ($this->method === 'GET') {
       $response = $this->client->get($this->uri);
       $res = json_decode($response, true);
@@ -111,7 +118,6 @@ class EzpizeeAPIClientController extends ControllerBase
     else if ($this->method === 'POST') {
       $this->validateCSRFToken();
       if (isset($this->contentType) && strpos($this->contentType, 'application/json') !== false) {
-        //die(json_encode([$this->uri, $this->body]));
         $response = $this->client->post($this->uri, $this->body);
         $res = json_decode($response, true);
       }

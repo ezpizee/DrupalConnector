@@ -29,7 +29,7 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
     $this->microserviceClient = $client;
   }
 
-  public function load(string $method, string $uri): array
+  public function load(string $uri): array
   {
     $uri = str_replace('//', '/', '/'.$uri);
     RequestEndpointValidator::validate($uri, $this->endpoints);
