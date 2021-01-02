@@ -2,7 +2,7 @@
 
 namespace Drupal\ezpz_api\Controller\ContextProcessors\ExpireIn;
 
-use Ezpizee\ContextProcessor\Base as BaseContextProcessor;
+use Drupal\ezpz_api\Controller\ContextProcessors\BaseContextProcessor;
 use Ezpizee\MicroservicesClient\Client;
 
 class ContextProcessor extends BaseContextProcessor

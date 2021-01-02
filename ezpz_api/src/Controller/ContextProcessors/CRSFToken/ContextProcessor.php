@@ -3,7 +3,7 @@
 namespace Drupal\ezpz_api\Controller\ContextProcessors\CRSFToken;
 
 use Drupal;
-use Ezpizee\ContextProcessor\Base as BaseContextProcessor;
+use Drupal\ezpz_api\Controller\ContextProcessors\BaseContextProcessor;
 
 class ContextProcessor extends BaseContextProcessor
 {

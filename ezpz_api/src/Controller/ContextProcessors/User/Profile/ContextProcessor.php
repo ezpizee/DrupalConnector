@@ -2,7 +2,7 @@
 
 namespace Drupal\ezpz_api\Controller\ContextProcessors\User\Profile;
 
-use Ezpizee\ContextProcessor\Base as BaseContextProcessor;
+use Drupal\ezpz_api\Controller\ContextProcessors\BaseContextProcessor;
 
 class ContextProcessor extends BaseContextProcessor
 {
