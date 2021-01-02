@@ -36,25 +36,12 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
     $namespace = RequestEndpointValidator::getContextProcessorNamespace();
     $class = new $namespace();
     if ($class instanceof BaseContextProcessor) {
-
       $class->setMicroServiceClient($this->microserviceClient);
       $requestData = empty(Drupal::request()->request->all())
         ? json_decode(Drupal::request()->getContent(), true)
         : Drupal::request()->request->all();
       $class->setRequestData(empty($requestData)?[]:$requestData);
-
-      if (!in_array($method, $class->allowedMethods())) {
-        $class->setContextCode(405);
-        $class->setContextMessage('Method not allowed');
-        return $class->getContext();
-      } else if (!$class->validRequiredParams()) {
-        $class->setContextMessage('INVALID_VALUE_FOR_REQUIRED_FIELD');
-        $class->setContextCode(422);
-        return $class->getContext();
-      } else {
-        $class->processContext();
-        return $class->getContext();
-      }
+      return $class->getContext();
     }
     return ['code'=>404, 'message'=>'Invalid namespace: '.$namespace, 'data'=>null];
   }
