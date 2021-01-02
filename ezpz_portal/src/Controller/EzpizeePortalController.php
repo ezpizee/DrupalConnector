@@ -32,7 +32,10 @@ class EzpizeePortalController extends ControllerBase
       $env = $this->ezpzConfig->get('env');
       $cdnUrl = Client::cdnSchema($env).Client::cdnHost($env).Client::adminUri('drupal');
       $this->mode = 'admin';
-      $html = Client::getContentAsString($cdnUrl, true);
+      if ($env === 'local') {
+        Client::setIgnorePeerValidation(true);
+      }
+      $html = Client::getContentAsString($cdnUrl);
       $this->formatSPAOutput($html);
       return new Response(
         $html,

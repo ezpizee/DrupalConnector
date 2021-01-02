@@ -51,7 +51,7 @@ class EzpizeeAPIClientController extends ControllerBase
       $this->client->setPlatformVersion(Drupal::VERSION);
       $this->addHeaderRequest('user_id', Drupal::currentUser()->id());
       if ($env === 'local') {
-        $this->client->verifyPeer(false);
+        Client::setIgnorePeerValidation(true);
       }
       $this->uri = $this->request->query->get('endpoint');
       if ($this->uri && $this->uri[0] !== '/') {
