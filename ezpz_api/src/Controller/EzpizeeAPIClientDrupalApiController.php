@@ -49,7 +49,7 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
           ? json_decode(Drupal::request()->getContent(), true)
           : Drupal::request()->request->all();
         $class->setRequestData(empty($requestData)?[]:$requestData);
-        $class->exec();
+        $class->processContext();
         return $class->getContext();
       }
     }

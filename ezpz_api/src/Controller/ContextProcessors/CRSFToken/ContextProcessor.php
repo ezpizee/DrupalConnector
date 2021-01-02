@@ -9,13 +9,11 @@ class ContextProcessor extends BaseContextProcessor
 {
   public function requiredAccessToken(): bool {return false;}
 
-  public function isSystemUser(): bool {return false;}
-
-  public function methods(): array {return ['GET'];}
+  public function allowedMethods(): array {return ['GET'];}
 
   public function validRequiredParams(): bool {return true;}
 
-  public function exec(): void {
+  public function processContext(): void {
     $this->setContext(['token' => Drupal::csrfToken()->get()]);
   }
 }

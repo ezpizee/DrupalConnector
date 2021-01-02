@@ -15,4 +15,6 @@ abstract class BaseContextProcessor extends Base
   public function setMicroServiceClient(Client $client): void {$this->microserviceClient = $client;}
 
   public function getMicroServiceClient(): Client {return $this->microserviceClient;}
+
+  public function isSystemUserOnly(): bool {return false;}
 }
