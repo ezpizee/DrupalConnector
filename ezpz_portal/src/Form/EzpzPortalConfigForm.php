@@ -86,7 +86,8 @@ class EzpzPortalConfigForm extends ConfigFormBase {
       Client::KEY_ENV => $form_state->getValue(Client::KEY_ENV)
     ];
 
-    $response = Client::install(Client::DEFAULT_ACCESS_TOKEN_KEY, $data);
+    $tokenHandler = 'Drupal\ezpz_api\Controller\ContextProcessors\TokenHandler';
+    $response = Client::install(Client::DEFAULT_ACCESS_TOKEN_KEY, $data, $tokenHandler);
 
     if (!empty($response)) {
       if (isset($response['code']) && (int)$response['code'] !== 200) {
