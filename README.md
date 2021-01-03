@@ -33,9 +33,18 @@ INSTALLATION
 
  1) Download the module, or pulled, and placed under */modules/custom* folder
  
+ 2) Install **composer**, if you don't already have it installed. 
+    Go here https://getcomposer.org/ or https://packagist.org/ for how to install **composer**.
+ 
  2) At the root of your Drupal environment, run the following composer commands, to install the dependencies:
     ```
+    php composer.phar require ezpizee/connector-utils "dev-master"
+    php composer.phar require ezpizee/contextprocessor "dev-master"
+    
+    OR, depending on how you installed your **composer**, just
+    
     composer require ezpizee/connector-utils "dev-master"
+    composer require ezpizee/contextprocessor "dev-master"
     ```
     
     *IF THERE ARE DEPENDENCIES MISSING ISSUE, install the following dependencies:*
