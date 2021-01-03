@@ -3,3 +3,5 @@ type: module
 description: For making API calls from Drupal to Ezpizee
 package: Custom
 core: 8.x
+version: '0.0.1'
+project: 'drupal'
