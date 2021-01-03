@@ -16,8 +16,6 @@ class EzpizeePortalController extends ControllerBase
    */
   private $ezpzConfig;
 
-  private $mode = 'install';
-
   /**
    * @return Response
    */
@@ -31,7 +29,6 @@ class EzpizeePortalController extends ControllerBase
       $this->ezpzConfig->get('env')) {
       $env = $this->ezpzConfig->get('env');
       $cdnUrl = Client::cdnSchema($env).Client::cdnHost($env).Client::adminUri('drupal');
-      $this->mode = 'admin';
       if ($env === 'local') {
         Client::setIgnorePeerValidation(true);
       }
@@ -64,23 +61,12 @@ class EzpizeePortalController extends ControllerBase
 
   private function formatSPAOutput(&$spaHTMLContent): void
   {
-    $patterns = ["\n", "\r", "\t", "\s+"];
-    $replaces = ["", "", "", " "];
-    if (!empty($this->ezpzConfig)) {
-      $data = $this->ezpzConfig->getRawData();
-      foreach ($data as $key=>$val) {
-        $patterns[] = '{'.$key.'}';
-        $replaces[] = $val;
-      }
-    }
-    if ($this->mode === 'admin') {
-      $baseUrl = Drupal::request()->getSchemeAndHttpHost();
-      $requestUri = Drupal::request()->getRequestUri();
-      $patterns[] = '{loginPageRedirectUrl}';
-      $replaces[] = $baseUrl . '/user/login?destination=' . $requestUri;
-    }
+    $baseUrl = Drupal::request()->getSchemeAndHttpHost();
+    $requestUri = Drupal::request()->getRequestUri();
+    $patterns = ["\n", "\r", "\t", "\s+", '{loginPageRedirectUrl}'];
+    $replaces = ["", "", "", " ", $baseUrl . '/user/login?destination=' . $requestUri];
     $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR;
-    $override = str_replace($patterns, $replaces, file_get_contents($dir . 'ezpz_'.$this->mode.'_override.js'));
+    $override = str_replace($patterns, $replaces, file_get_contents($dir . 'ezpz_admin_override.js'));
     $spaHTMLContent = str_replace('<' . 'head>', '<' . 'head' . '><' . 'script>' . $override . '</' . 'script>', $spaHTMLContent);
   }
 }
