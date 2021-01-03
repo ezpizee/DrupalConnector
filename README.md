@@ -24,7 +24,7 @@ REQUIREMENTS
 ------------
 
  * PHP 7.x
- * Drupal 8
+ * Drupal 8.x or later
  * Ezpizee's subscription
 
 
