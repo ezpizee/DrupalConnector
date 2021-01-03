@@ -38,20 +38,21 @@ INSTALLATION
  
  2) At the root of your Drupal environment, run the following composer commands, to install the dependencies:
     ```
-    php composer.phar require ezpizee/connector-utils "dev-master"
-    php composer.phar require ezpizee/contextprocessor "dev-master"
+    php composer require mashape/unirest-php
+    php composer require ezpizee/utils "dev-master"
+    php composer require ezpizee/microservices-client "dev-master"
+    php composer require ezpizee/connector-utils "dev-master"
+    php composer require ezpizee/contextprocessor "dev-master"
+    ```
     
     OR, depending on how you installed your **composer**, just
     
-    composer require ezpizee/connector-utils "dev-master"
-    composer require ezpizee/contextprocessor "dev-master"
-    ```
-    
-    *IF THERE ARE DEPENDENCIES MISSING ISSUE, install the following dependencies:*
     ```
     composer require mashape/unirest-php
     composer require ezpizee/utils "dev-master"
-    composer require ezpizee/microservices-utils "dev-master"
+    composer require ezpizee/microservices-client "dev-master"
+    composer require ezpizee/connector-utils "dev-master"
+    composer require ezpizee/contextprocessor "dev-master"
     ```
 
  3) Go to **Manage &gt; Extend** (/admin/modules)
