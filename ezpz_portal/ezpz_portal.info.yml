@@ -3,7 +3,8 @@ type: module
 description: For managing your Ezpizee e-commerce components on Drupal
 package: Custom
 core: 8.x
-version: '0.0.1'
+core_version_requirement: ^8 || ^9
+version: '0.0.2'
 project: 'drupal'
 configure: ezpz_portal.settings
 libraries:
