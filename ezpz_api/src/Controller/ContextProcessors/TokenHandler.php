@@ -51,4 +51,9 @@ class TokenHandler implements TokenHandlerInterface
         }
         return new Token([]);
     }
+
+    public function setCookie(string $name, string $value, int $expire = 0, string $path = '/')
+    {
+        setcookie($name, $value, $expire, $path);
+    }
 }
