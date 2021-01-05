@@ -7,13 +7,9 @@ use Ezpizee\MicroservicesClient\Client;
 
 class ContextProcessor extends BaseContextProcessor
 {
-  protected function requiredAccessToken(): bool {return false;}
-
-  protected function allowedMethods(): array {return ['GET'];}
-
-  protected function validRequiredParams(): bool {return true;}
-
-  public function processContext(): void {
+  public function processContext()
+  : void
+  {
     $tokenKey = $this->microserviceClient->getConfig(Client::KEY_ACCESS_TOKEN);
     $token = $this->microserviceClient->getToken($tokenKey);
     $this->microserviceClient->setRefreshToken(true);
@@ -22,5 +18,23 @@ class ContextProcessor extends BaseContextProcessor
     $response = $this->microserviceClient->post($uri, [])->getAsArray();
     $this->microserviceClient->setRefreshToken(false);
     $this->setContextData($response);
+  }
+
+  protected function requiredAccessToken()
+  : bool
+  {
+    return false;
+  }
+
+  protected function allowedMethods()
+  : array
+  {
+    return ['GET'];
+  }
+
+  protected function validRequiredParams()
+  : bool
+  {
+    return true;
   }
 }

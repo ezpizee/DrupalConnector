@@ -17,10 +17,10 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
    */
   private $microserviceClient;
   private $endpoints = [
-    '/api/v1/drupal/refresh/token' => 'Drupal\ezpz_api\Controller\ContextProcessors\RefreshToken',
-    '/api/v1/drupal/expire-in' => 'Drupal\ezpz_api\Controller\ContextProcessors\ExpireIn',
+    '/api/v1/drupal/refresh/token'      => 'Drupal\ezpz_api\Controller\ContextProcessors\RefreshToken',
+    '/api/v1/drupal/expire-in'          => 'Drupal\ezpz_api\Controller\ContextProcessors\ExpireIn',
     '/api/v1/drupal/authenticated-user' => 'Drupal\ezpz_api\Controller\ContextProcessors\AuthenticatedUser',
-    '/api/v1/drupal/crsf-token' => 'Drupal\ezpz_api\Controller\ContextProcessors\CRSFToken'
+    '/api/v1/drupal/crsf-token'         => 'Drupal\ezpz_api\Controller\ContextProcessors\CRSFToken'
   ];
 
   public function __construct(Client $client)
@@ -29,9 +29,21 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
     $this->microserviceClient = $client;
   }
 
-  public function load(string $uri): array
+  private function checkAuthenticated()
   {
-    $uri = str_replace('//', '/', '/'.$uri);
+    if (!$this->currentUser()->isAuthenticated()) {
+      $baseUrl = Drupal::request()->getSchemeAndHttpHost();
+      $requestUri = Drupal::request()->getRequestUri();
+      $response = new RedirectResponse($baseUrl . '/user/login?destination=' . $requestUri, 302);
+      $response->send();
+      return;
+    }
+  }
+
+  public function load(string $uri)
+  : array
+  {
+    $uri = str_replace('//', '/', '/' . $uri);
     RequestEndpointValidator::validate($uri, $this->endpoints);
     $namespace = RequestEndpointValidator::getContextProcessorNamespace();
     $class = new $namespace();
@@ -40,20 +52,9 @@ class EzpizeeAPIClientDrupalApiController extends ControllerBase
       $requestData = empty(Drupal::request()->request->all())
         ? json_decode(Drupal::request()->getContent(), true)
         : Drupal::request()->request->all();
-      $class->setRequestData(empty($requestData)?[]:$requestData);
+      $class->setRequestData(empty($requestData) ? [] : $requestData);
       return $class->getContext();
     }
-    return ['code'=>404, 'message'=>'Invalid namespace: '.$namespace, 'data'=>null];
-  }
-
-  private function checkAuthenticated()
-  {
-    if (!$this->currentUser()->isAuthenticated()) {
-      $baseUrl = \Drupal::request()->getSchemeAndHttpHost();
-      $requestUri = \Drupal::request()->getRequestUri();
-      $response = new RedirectResponse($baseUrl . '/user/login?destination=' . $requestUri, 302);
-      $response->send();
-      return;
-    }
+    return ['code' => 404, 'message' => 'Invalid namespace: ' . $namespace, 'data' => null];
   }
 }

@@ -14,11 +14,23 @@ abstract class BaseContextProcessor extends Base
    */
   protected $microserviceClient;
 
-  public function setMicroServiceClient(Client $client): void {$this->microserviceClient = $client;}
+  public function getMicroServiceClient()
+  : Client
+  {
+    return $this->microserviceClient;
+  }
 
-  public function getMicroServiceClient(): Client {return $this->microserviceClient;}
+  public function setMicroServiceClient(Client $client)
+  : void
+  {
+    $this->microserviceClient = $client;
+  }
 
-  public function isSystemUserOnly(): bool {return false;}
+  public function isSystemUserOnly()
+  : bool
+  {
+    return false;
+  }
 
   protected function subRequest(string $method,
                                 string $path,
@@ -26,11 +38,21 @@ abstract class BaseContextProcessor extends Base
                                 array $headers = [],
                                 array $cookies = [],
                                 string $bodyContent = '',
-                                ResponseInterface $response = null): Response {
-    return new Response($method, $path, json_encode(['todo'=>'subRequest method body is empty']));
+                                ResponseInterface $response = null)
+  : Response
+  {
+    return new Response($method, $path, json_encode(['todo' => 'subRequest method body is empty']));
   }
 
-  protected function isValidAccessToken(): bool {return true;}
+  protected function isValidAccessToken()
+  : bool
+  {
+    return true;
+  }
 
-  protected function isSystemUser(string $user, string $pwd): bool {return true;}
+  protected function isSystemUser(string $user, string $pwd)
+  : bool
+  {
+    return true;
+  }
 }

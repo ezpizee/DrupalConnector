@@ -28,7 +28,7 @@ class EzpizeePortalController extends ControllerBase
       $this->ezpzConfig->get('app_name') &&
       $this->ezpzConfig->get('env')) {
       $env = $this->ezpzConfig->get('env');
-      $cdnUrl = Client::cdnSchema($env).Client::cdnHost($env).Client::adminUri('drupal');
+      $cdnUrl = Client::cdnSchema($env) . Client::cdnHost($env) . Client::adminUri('drupal');
       if ($env === 'local') {
         Client::setIgnorePeerValidation(true);
       }
@@ -39,8 +39,7 @@ class EzpizeePortalController extends ControllerBase
         Response::HTTP_OK,
         array('content-type' => 'text/html; charset=UTF-8')
       );
-    }
-    else {
+    } else {
       $baseUrl = Drupal::request()->getSchemeAndHttpHost();
       $response = new RedirectResponse($baseUrl . '/admin/config/services/ezpz/portal', 302);
       $response->send();
@@ -59,13 +58,14 @@ class EzpizeePortalController extends ControllerBase
     }
   }
 
-  private function formatSPAOutput(&$spaHTMLContent): void
+  private function formatSPAOutput(&$spaHTMLContent)
+  : void
   {
     $baseUrl = Drupal::request()->getSchemeAndHttpHost();
     $requestUri = Drupal::request()->getRequestUri();
     $patterns = ["\n", "\r", "\t", "\s+", '{loginPageRedirectUrl}'];
     $replaces = ["", "", "", " ", $baseUrl . '/user/login?destination=' . $requestUri];
-    $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR;
+    $dir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR;
     $override = str_replace($patterns, $replaces, file_get_contents($dir . 'ezpz_admin_override.js'));
     $spaHTMLContent = str_replace('<' . 'head>', '<' . 'head' . '><' . 'script>' . $override . '</' . 'script>', $spaHTMLContent);
   }
