@@ -39,7 +39,8 @@ class EzpizeePortalController extends ControllerBase
         Response::HTTP_OK,
         array('content-type' => 'text/html; charset=UTF-8')
       );
-    } else {
+    }
+    else {
       $baseUrl = Drupal::request()->getSchemeAndHttpHost();
       $response = new RedirectResponse($baseUrl . '/admin/config/services/ezpz/portal', 302);
       $response->send();

@@ -33,7 +33,8 @@ class ContextProcessor extends BaseContextProcessor
         "role"        => $user->getRoles(),
         "partnerInfo" => isset($data['partnerInfo']) ? $data['partnerInfo'] : []
       ];
-    } else if (!empty($user)) {
+    }
+    else if (!empty($user)) {
       return [
         "uid"         => $user->id(),
         "displayName" => $user->getDisplayName(),

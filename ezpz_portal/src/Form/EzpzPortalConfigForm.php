@@ -90,10 +90,12 @@ class EzpzPortalConfigForm extends ConfigFormBase
       if (isset($response['code']) && (int)$response['code'] !== 200) {
         if ($response['message'] === 'ITEM_ALREADY_EXISTS') {
           Drupal::messenger()->addMessage('App Name is already taken. Give a different name and try again.');
-        } else {
+        }
+        else {
           Drupal::messenger()->addMessage($response['message']);
         }
-      } else {
+      }
+      else {
         $this->config('ezpz_portal.settings')
           ->set('client_id', $form_state->getValue('client_id'))
           ->set('client_secret', $form_state->getValue('client_secret'))
@@ -103,7 +105,8 @@ class EzpzPortalConfigForm extends ConfigFormBase
 
         parent::submitForm($form, $form_state);
       }
-    } else {
+    }
+    else {
       Drupal::messenger()->addMessage('Failed to install Ezpizee App');
     }
   }

@@ -60,7 +60,8 @@ class EzpizeeAPIClientController extends ControllerBase
         $this->uri = str_replace('//', '/', '/' . $this->uri);
       }
       $this->method = $this->request->getMethod();
-      $this->contentType = $this->request->headers->get('content-type');
+      $cType = $this->request->headers->get('content-type');
+      $this->contentType = explode(';', empty($cType) ? '' : $cType)[0];
       $this->body = empty($this->request->request->all()) ? json_decode($this->request->getContent(), true) : $this->request->request->all();
       if (empty($this->body)) {
         $this->body = [];
@@ -82,7 +83,8 @@ class EzpizeeAPIClientController extends ControllerBase
         return $this->requestToDrupal();
       }
       return $this->requestToMicroServices();
-    } else {
+    }
+    else {
       return new JsonResponse(
         ['status' => 'error', 'code' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => 'Missing Ezpizee endpoint'],
         Response::HTTP_INTERNAL_SERVER_ERROR
@@ -122,35 +124,43 @@ class EzpizeeAPIClientController extends ControllerBase
         $res['data']['created_by'] = $userInfo;
         $res['data']['modified_by'] = $userInfo;
       }
-    } else if ($this->method === 'POST') {
+    }
+    else if ($this->method === 'POST') {
       $this->validateCSRFToken();
-      if (isset($this->contentType) && strpos($this->contentType, 'application/json') !== false) {
+      if ('application/json' === $this->contentType || strpos($this->contentType, 'application/json') !== false) {
         $response = $this->client->post($this->uri, $this->body);
         $res = json_decode($response, true);
-      } else if (isset($this->contentType) && strpos($this->contentType, 'multipart/form-data;') !== false) {
+      }
+      else if ('multipart/form-data' === $this->contentType || strpos($this->contentType, 'multipart/form-data') !== false) {
         if ($this->hasFileUploaded()) {
           $response = $this->submitFormDataWithFile();
           $res = json_decode($response, true);
-        } else {
+        }
+        else {
           $response = $this->submitFormData();
           $res = json_decode($response, true);
         }
-      } else {
+      }
+      else {
         $res['message'] = 'INVALID_CONTENT_TYPE';
       }
-    } else if ($this->method === 'PUT') {
+    }
+    else if ($this->method === 'PUT') {
       $this->validateCSRFToken();
-      if (isset($this->contentType) && strpos($this->contentType, 'application/json') !== false) {
+      if ('application/json' === $this->contentType || strpos($this->contentType, 'application/json') !== false) {
         $response = $this->client->put($this->uri, $this->body);
         $res = json_decode($response, true);
-      } else {
+      }
+      else {
         $res['message'] = 'INVALID_CONTENT_TYPE';
       }
-    } else if ($this->method === 'DELETE') {
+    }
+    else if ($this->method === 'DELETE') {
       $this->validateCSRFToken();
       $response = $this->client->delete($this->uri, $this->body);
       $res = json_decode($response, true);
-    } else if ($this->method === 'PATCH') {
+    }
+    else if ($this->method === 'PATCH') {
       $this->validateCSRFToken();
       $response = $this->client->patch($this->uri, $this->body);
       $res = json_decode($response, true);
