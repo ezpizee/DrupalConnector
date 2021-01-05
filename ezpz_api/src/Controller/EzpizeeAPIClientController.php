@@ -121,7 +121,7 @@ class EzpizeeAPIClientController extends ControllerBase
         $response = $this->client->post($this->uri, $this->body);
         $res = json_decode($response, true);
       }
-      else if (isset($this->contentType) && strpos($this->contentType, 'multipart/form-data;') !== false) {
+      else if (isset($this->contentType) && strpos('multipart/form-data', $this->contentType) !== false) {
         if ($this->hasFileUploaded()) {
           $response = $this->submitFormDataWithFile();
           $res = json_decode($response, true);
