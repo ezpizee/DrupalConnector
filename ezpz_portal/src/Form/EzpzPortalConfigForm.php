@@ -2,6 +2,9 @@
 
 namespace Drupal\ezpz_portal\Form;
 
+include_once explode(DIRECTORY_SEPARATOR.'ezpz'.DIRECTORY_SEPARATOR, __DIR__)[0].DIRECTORY_SEPARATOR.'ezpz'.
+  DIRECTORY_SEPARATOR.'ezpzlib'.DIRECTORY_SEPARATOR.'autoload.php';
+
 use Drupal;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;

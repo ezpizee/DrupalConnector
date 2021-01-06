@@ -2,6 +2,9 @@
 
 namespace Drupal\ezpz_api\Controller;
 
+include_once explode(DIRECTORY_SEPARATOR.'ezpz'.DIRECTORY_SEPARATOR, __DIR__)[0].DIRECTORY_SEPARATOR.'ezpz'.
+  DIRECTORY_SEPARATOR.'ezpzlib'.DIRECTORY_SEPARATOR.'autoload.php';
+
 use Drupal;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Controller\ControllerBase;
@@ -14,7 +17,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Unirest\Request\Body;
-
 
 class EzpizeeAPIClientController extends ControllerBase
 {
