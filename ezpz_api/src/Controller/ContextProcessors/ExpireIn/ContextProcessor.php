@@ -12,7 +12,7 @@ class ContextProcessor extends BaseContextProcessor
   {
     $tokenKey = $this->microserviceClient->getConfig(Client::KEY_ACCESS_TOKEN);
     $token = $this->microserviceClient->getToken($tokenKey);
-    $this->setContextData(['expire_in', $token->getExpireIn()]);
+    $this->setContextData(['expire_in' => $token->getExpireIn()]);
   }
 
   protected function requiredAccessToken()
