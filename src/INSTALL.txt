@@ -1,0 +1,91 @@
+
+CONTENTS OF THIS FILE
+---------------------
+
+ * Requirements and notes
+ * Optional server requirements
+ * Installation
+ * More information
+
+REQUIREMENTS AND NOTES
+----------------------
+
+Drupal requires:
+
+- A web server. Apache (version 2.0 or greater) is recommended.
+- PHP 5.2.4 (or greater) (http://www.php.net/).
+- One of the following databases:
+  - MySQL 5.0.15 (or greater) (http://www.mysql.com/).
+  - MariaDB 5.1.44 (or greater) (http://mariadb.org/). MariaDB is a fully
+    compatible drop-in replacement for MySQL.
+  - Percona Server 5.1.70 (or greater) (http://www.percona.com/). Percona
+    Server is a backwards-compatible replacement for MySQL.
+  - SQLite 3.3.7 (or greater) (http://www.sqlite.org/).
+
+For more detailed information about Drupal requirements, including a list of
+PHP extensions and configurations that are required, see "System requirements"
+(http://drupal.org/requirements) in the Drupal.org online documentation.
+
+For detailed information on how to configure a test server environment using a
+variety of operating systems and web servers, see "Local server setup"
+(http://drupal.org/node/157602) in the Drupal.org online documentation.
+
+Note that all directories mentioned in this document are always relative to the
+directory of your Drupal installation, and commands are meant to be run from
+this directory (except for the initial commands that create that directory).
+
+OPTIONAL SERVER REQUIREMENTS
+----------------------------
+
+- If you want to use Drupal's "Clean URLs" feature on an Apache web server, you
+  will need the mod_rewrite module and the ability to use local .htaccess
+  files. For Clean URLs support on IIS, see "Clean URLs with IIS"
+  (http://drupal.org/node/3854) in the Drupal.org online documentation.
+
+- If you plan to use XML-based services such as RSS aggregation, you will need
+  PHP's XML extension. This extension is enabled by default on most PHP
+  installations.
+
+- To serve gzip compressed CSS and JS files on an Apache web server, you will
+  need the mod_headers module and the ability to use local .htaccess files.
+
+- Some Drupal functionality (e.g., checking whether Drupal and contributed
+  modules need updates, RSS aggregation, etc.) require that the web server be
+  able to go out to the web and download information. If you want to use this
+  functionality, you need to verify that your hosting provider or server
+  configuration allows the web server to initiate outbound connections. Most web
+  hosting setups allow this.
+
+
+INSTALLATION
+------------
+
+1. Download the latest release from our repository https://github.com/ezpizee/DrupalConnector and unzip
+
+2. Log in to your Drupal instance as admin
+
+3. Go to **Manage > Extend**
+
+4. Click the "**+ Install new module**" button
+
+5. Choose the **/dist/ezpz.zip** from your unzipped folder to upload
+
+6. Click the **Install** button
+
+7. Go to *Manage &gt; Configuration (/admin/config)*
+   a. Under **WEB SERVICES**, click on **Ezpizee Portal**
+   b. Fill in the value for
+      - **Client ID** (obtain from https://www.ezpizee.com/en/user/admin-ui.html),
+      - **Client Secret** (obtain from https://www.ezpizee.com/en/user/admin-ui.html),
+      - **App Name** (a unique name that is not already been used in any other Ezpizee installation)
+   c. Select the Environment to integrate with Ezpizee (when not sure, select **Production**)
+   d. Click **Save Configuration**
+
+8. Click on the *Ezpizee Portal* from Drupal admin menu
+
+
+MORE INFORMATION
+----------------
+
+- See the online documentation and seek support at:
+  https://www.ezpizee.com/en/support/docs.html

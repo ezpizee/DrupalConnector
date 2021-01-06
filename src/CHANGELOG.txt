@@ -1,2 +1,4 @@
-* For a full list of fixes in the latest release, visit:
- https://github.com/ezpizee/DrupalConnector/releases
+Drupal 8.x, 2021-01-06
+-----------------------
+- Initial release
+
