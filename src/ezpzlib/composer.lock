@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6515376447c82ffbe16fb7f74d967e39",
+    "content-hash": "812ff5bcee861278d740b470fbd3d8aa",
     "packages": [
         {
             "name": "ezpizee/connector-utils",
@@ -194,6 +194,52 @@
                 "source": "https://github.com/ezpizee/microservices-utils/tree/master"
             },
             "time": "2021-01-07T00:37:08+00:00"
+        },
+        {
+            "name": "gx2cms/project",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezpizee/gx2cms-project.git",
+                "reference": "adb0e656393ad9864d6d52bafcab290d047fc586"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezpizee/gx2cms-project/zipball/adb0e656393ad9864d6d52bafcab290d047fc586",
+                "reference": "adb0e656393ad9864d6d52bafcab290d047fc586",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "GX2CMS\\Project": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pang Khon",
+                    "email": "khon.pang@ezpizee.com"
+                },
+                {
+                    "name": "Sothea Nim",
+                    "email": "sothea.nim@ezpizee.com.com"
+                }
+            ],
+            "description": "For all GX2CMS Project",
+            "homepage": "https://github.com/ezpizee/gx2cms-project",
+            "support": {
+                "issues": "https://github.com/ezpizee/gx2cms-project/issues",
+                "source": "https://github.com/ezpizee/gx2cms-project/tree/master"
+            },
+            "time": "2021-01-20T01:23:52+00:00"
         },
         {
             "name": "lcobucci/jwt",
@@ -501,7 +547,8 @@
         "ezpizee/utils": 20,
         "webconsol/handlebars.php": 20,
         "webconsol/php-hbs-helpers": 20,
-        "masterminds/html5": 20
+        "masterminds/html5": 20,
+        "gx2cms/project": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
