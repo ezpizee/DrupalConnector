@@ -511,7 +511,13 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "HandlebarsHelpers\\": "src/"
+                    "Handlebars\\Engine": "src/",
+                    "Handlebars\\Exception": "src/",
+                    "Handlebars\\Helpers": "src/",
+                    "Handlebars\\Less": "src/",
+                    "Handlebars\\Processors": "src/",
+                    "Handlebars\\Sass": "src/",
+                    "Handlebars\\Utils": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
