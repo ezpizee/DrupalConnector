@@ -81,7 +81,7 @@ class EzpizeeAPIClientController extends ControllerBase
   : JsonResponse
   {
     if (!empty($this->uri)) {
-      if (StringUtil::startsWith($this->uri, "/api/v1/drupal/")) {
+      if (StringUtil::startsWith($this->uri, "/api/drupal/")) {
         return $this->requestToDrupal();
       }
       return $this->requestToMicroServices();

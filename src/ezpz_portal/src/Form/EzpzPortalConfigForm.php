@@ -66,7 +66,17 @@ class EzpzPortalConfigForm extends ConfigFormBase
       '#title'         => t('Environment'),
       '#default_value' => $env ? $env : 'prod',
       '#options'       => $options,
-      '#description'   => t('Ezpizee environment which you are connecting to or integrate with. If not sure, pick Production'),
+      '#description'   => t('Ezpizee environment which you are connecting to or integrate with. Default: Production'),
+      '#required'      => TRUE
+    ];
+    $protocol = $form_state->getValue('protocol', $ezpzPortalConfig->get('protocol'));
+    $options = ['' => 'Select a protocol', 'http://' => 'http://', 'https://' => 'https://'];
+    $form['protocol'] = [
+      '#type'          => 'select',
+      '#title'         => t('Protocol'),
+      '#default_value' => $protocol ? $protocol : 'https://',
+      '#options'       => $options,
+      '#description'   => t('The protocol that you will connect to Ezpizee environment. Default: https://'),
       '#required'      => TRUE
     ];
 
@@ -78,12 +88,12 @@ class EzpzPortalConfigForm extends ConfigFormBase
    */
   public function submitForm(array &$form, FormStateInterface $form_state)
   {
-
     $data = [
       Client::KEY_CLIENT_ID     => $form_state->getValue(Client::KEY_CLIENT_ID),
       Client::KEY_CLIENT_SECRET => $form_state->getValue(Client::KEY_CLIENT_SECRET),
       Client::KEY_APP_NAME      => $form_state->getValue(Client::KEY_APP_NAME),
-      Client::KEY_ENV           => $form_state->getValue(Client::KEY_ENV)
+      Client::KEY_ENV           => $form_state->getValue(Client::KEY_ENV),
+      'protocol'                => $form_state->getValue('protocol')
     ];
 
     $tokenHandler = 'Drupal\ezpz_api\Controller\ContextProcessors\TokenHandler';
@@ -93,6 +103,7 @@ class EzpzPortalConfigForm extends ConfigFormBase
       if (isset($response['code']) && (int)$response['code'] !== 200) {
         if ($response['message'] === 'ITEM_ALREADY_EXISTS') {
           Drupal::messenger()->addMessage('App Name is already taken. Give a different name and try again.');
+          parent::submitForm($form, $form_state);
         }
         else {
           Drupal::messenger()->addMessage($response['message']);
@@ -104,6 +115,7 @@ class EzpzPortalConfigForm extends ConfigFormBase
           ->set('client_secret', $form_state->getValue('client_secret'))
           ->set('app_name', $form_state->getValue('app_name'))
           ->set('env', $form_state->getValue('env'))
+          ->set('protocol', $form_state->getValue('protocol'))
           ->save();
 
         parent::submitForm($form, $form_state);

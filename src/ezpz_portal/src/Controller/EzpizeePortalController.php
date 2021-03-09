@@ -31,7 +31,8 @@ class EzpizeePortalController extends ControllerBase
       $this->ezpzConfig->get('app_name') &&
       $this->ezpzConfig->get('env')) {
       $env = $this->ezpzConfig->get('env');
-      $cdnUrl = Client::cdnSchema($env) . Client::cdnHost($env) . Client::adminUri('drupal');
+      $protocol = $this->ezpzConfig->get('protocol');
+      $cdnUrl = ($protocol ? $protocol : Client::cdnSchema($env)) . Client::cdnHost($env) . Client::adminUri('drupal');
       if ($env === 'local') {
         Client::setIgnorePeerValidation(true);
       }
